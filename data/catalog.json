@@ -6,7 +6,7 @@
     "genre": "sci-fi",
     "subgenre": "space-opera",
     "themes": ["power", "ecology", "religion", "survival", "politics"],
-    "mood": "adventurous",
+    "mood": ["adventurous", "tense", "philosophical"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "En un futuro lejano, el joven Paul Atreides debe sobrevivir en el planeta desertico Arrakis, unica fuente de la sustancia mas valiosa del universo, mientras enfrenta conspiraciones politicas y descubre su destino.",
@@ -15,7 +15,10 @@
     "year": 1965,
     "similar_to": ["fundacion-asimov", "el-problema-tres-cuerpos-liu"],
     "open_library_key": "/works/OL893415W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["chosen-one", "political-intrigue", "desert-planet", "messiah-figure", "coming-of-age"],
+    "pacing": "slow"
   },
   {
     "id": "fundacion-asimov",
@@ -24,7 +27,7 @@
     "genre": "sci-fi",
     "subgenre": "hard-sf",
     "themes": ["civilization", "mathematics", "prophecy", "decline", "knowledge"],
-    "mood": "reflective",
+    "mood": ["reflective", "philosophical"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "Un matematico predice la caida del Imperio Galactico y establece una Fundacion en el borde de la galaxia para preservar el conocimiento humano y acortar la era de barbarie que se avecina.",
@@ -33,7 +36,10 @@
     "year": 1951,
     "similar_to": ["dune-herbert", "el-problema-tres-cuerpos-liu"],
     "open_library_key": "/works/OL46125W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["galactic-empire", "psychohistory", "civilization-collapse", "scientific-prophecy"],
+    "pacing": "slow"
   },
   {
     "id": "neuromancer-gibson",
@@ -42,7 +48,7 @@
     "genre": "sci-fi",
     "subgenre": "cyberpunk",
     "themes": ["artificial-intelligence", "identity", "corporate-power", "hacking", "consciousness"],
-    "mood": "dark",
+    "mood": ["dark", "tense"],
     "complexity": "challenging",
     "language": "both",
     "synopsis": "Un hacker caido en desgracia es reclutado para el golpe cibernetico definitivo, sumergiendose en el ciberespacio de un futuro dominado por megacorporaciones e inteligencias artificiales.",
@@ -51,7 +57,10 @@
     "year": 1984,
     "similar_to": ["el-problema-tres-cuerpos-liu", "klara-sol-ishiguro"],
     "open_library_key": "/works/OL27258W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 5,
+    "tropes": ["cyberpunk-noir", "heist", "anti-hero", "virtual-reality", "corporate-dystopia"],
+    "pacing": "fast"
   },
   {
     "id": "el-problema-tres-cuerpos-liu",
@@ -60,7 +69,7 @@
     "genre": "sci-fi",
     "subgenre": "hard-sf",
     "themes": ["first-contact", "physics", "civilization", "existential-threat", "science"],
-    "mood": "reflective",
+    "mood": ["reflective", "dark", "tense"],
     "complexity": "challenging",
     "language": "both",
     "synopsis": "Durante la Revolucion Cultural china, una senal secreta enviada al espacio desencadena el primer contacto con una civilizacion extraterrestre, poniendo en peligro la existencia de la humanidad.",
@@ -69,7 +78,10 @@
     "year": 2008,
     "similar_to": ["fundacion-asimov", "neuromancer-gibson"],
     "open_library_key": "/works/OL17335938W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 5,
+    "tropes": ["first-contact", "alien-invasion", "hard-science", "civilization-clash", "existential-horror"],
+    "pacing": "moderate"
   },
   {
     "id": "klara-sol-ishiguro",
@@ -78,7 +90,7 @@
     "genre": "sci-fi",
     "subgenre": "soft-sf",
     "themes": ["consciousness", "love", "mortality", "artificial-intelligence", "devotion"],
-    "mood": "melancholic",
+    "mood": ["melancholic", "hopeful", "reflective"],
     "complexity": "accessible",
     "language": "both",
     "synopsis": "Klara, una Amiga Artificial alimentada por energia solar, observa el mundo desde un escaparate hasta que es elegida por una nina enferma, explorando que significa amar y ser humano.",
@@ -87,7 +99,10 @@
     "year": 2021,
     "similar_to": ["never-let-me-go-ishiguro", "neuromancer-gibson"],
     "open_library_key": "/works/OL24217370W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["artificial-intelligence", "unreliable-narrator", "dystopian-society", "sacrifice"],
+    "pacing": "slow"
   },
   {
     "id": "nombre-viento-rothfuss",
@@ -96,7 +111,7 @@
     "genre": "fantasy",
     "subgenre": "epic-fantasy",
     "themes": ["music", "knowledge", "loss", "coming-of-age", "magic"],
-    "mood": "adventurous",
+    "mood": ["adventurous", "melancholic"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "Kvothe, un legendario heroe convertido en posadero, narra su extraordinaria vida: desde huerfano de una troupe de artistas hasta estudiante en una prestigiosa universidad de magia.",
@@ -105,7 +120,10 @@
     "year": 2007,
     "similar_to": ["el-hobbit-tolkien", "juego-tronos-martin"],
     "open_library_key": "/works/OL5738581W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["unreliable-narrator", "magic-school", "tragic-backstory", "coming-of-age", "revenge-quest"],
+    "pacing": "slow"
   },
   {
     "id": "juego-tronos-martin",
@@ -114,7 +132,7 @@
     "genre": "fantasy",
     "subgenre": "dark-fantasy",
     "themes": ["power", "betrayal", "survival", "war", "family"],
-    "mood": "dark",
+    "mood": ["dark", "tense"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "Varias familias nobles luchan por el control del Trono de Hierro en un mundo medieval donde el invierno puede durar generaciones y antiguas amenazas despiertan mas alla del Muro.",
@@ -123,7 +141,10 @@
     "year": 1996,
     "similar_to": ["nombre-viento-rothfuss", "el-hobbit-tolkien"],
     "open_library_key": "/works/OL14863414W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 5,
+    "tropes": ["political-intrigue", "multiple-pov", "moral-ambiguity", "war", "betrayal"],
+    "pacing": "moderate"
   },
   {
     "id": "el-hobbit-tolkien",
@@ -132,7 +153,7 @@
     "genre": "fantasy",
     "subgenre": "high-fantasy",
     "themes": ["adventure", "courage", "home", "friendship", "greed"],
-    "mood": "whimsical",
+    "mood": ["whimsical", "adventurous"],
     "complexity": "accessible",
     "language": "both",
     "synopsis": "Bilbo Bolson, un hobbit casero y tranquilo, es arrastrado a una aventura epica con un grupo de enanos para recuperar su tesoro robado por el dragon Smaug.",
@@ -141,7 +162,10 @@
     "year": 1937,
     "similar_to": ["nombre-viento-rothfuss", "piranesi-clarke"],
     "open_library_key": "/works/OL262758W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 2,
+    "tropes": ["reluctant-hero", "quest", "found-family", "dragon", "coming-of-age"],
+    "pacing": "moderate"
   },
   {
     "id": "piranesi-clarke",
@@ -150,7 +174,7 @@
     "genre": "fantasy",
     "subgenre": "literary-fantasy",
     "themes": ["mystery", "solitude", "beauty", "memory", "wonder"],
-    "mood": "reflective",
+    "mood": ["reflective", "whimsical"],
     "complexity": "moderate",
     "language": "en",
     "synopsis": "Un hombre vive en una Casa infinita de salas llenas de estatuas y mareas oceanicas, catalogando sus maravillas, sin saber que su mundo esconde un misterio profundo sobre su propia identidad.",
@@ -159,7 +183,10 @@
     "year": 2020,
     "similar_to": ["el-hobbit-tolkien", "ficciones-borges"],
     "open_library_key": "/works/OL24217248W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["unreliable-narrator", "mystery", "liminal-spaces", "memory-loss", "identity"],
+    "pacing": "slow"
   },
   {
     "id": "cemetery-boys-thomas",
@@ -168,7 +195,7 @@
     "genre": "fantasy",
     "subgenre": "urban-fantasy",
     "themes": ["identity", "family", "belonging", "LGBTQ+", "death"],
-    "mood": "light",
+    "mood": ["hopeful", "romantic"],
     "complexity": "accessible",
     "language": "en",
     "synopsis": "Yadriel, un brujo trans latino, intenta demostrar su genero a su familia tradicional invocando un espiritu, pero accidentalmente convoca al fantasma de un chico rebelde que se niega a irse.",
@@ -177,7 +204,10 @@
     "year": 2020,
     "similar_to": ["el-hobbit-tolkien", "mexican-gothic-moreno-garcia"],
     "open_library_key": "/works/OL24217137W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 3,
+    "tropes": ["lgbtq-representation", "found-family", "ghost-story", "cultural-traditions", "coming-of-age"],
+    "pacing": "moderate"
   },
   {
     "id": "la-chica-tren-hawkins",
@@ -186,7 +216,7 @@
     "genre": "thriller",
     "subgenre": "psychological-thriller",
     "themes": ["memory", "trust", "deception", "obsession", "alcoholism"],
-    "mood": "tense",
+    "mood": ["tense", "dark"],
     "complexity": "accessible",
     "language": "both",
     "synopsis": "Rachel, una mujer con problemas de alcoholismo, observa cada dia desde el tren a una pareja aparentemente perfecta, hasta que presencia algo perturbador que la involucra en una desaparicion.",
@@ -195,7 +225,10 @@
     "year": 2015,
     "similar_to": ["gone-girl-flynn", "verity-hoover"],
     "open_library_key": "/works/OL17800047W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["unreliable-narrator", "multiple-pov", "domestic-noir", "missing-person", "alcoholism"],
+    "pacing": "fast"
   },
   {
     "id": "el-silencio-corderos-harris",
@@ -204,7 +237,7 @@
     "genre": "thriller",
     "subgenre": "crime-thriller",
     "themes": ["evil", "intelligence", "predation", "psychology", "courage"],
-    "mood": "dark",
+    "mood": ["dark", "tense"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "La joven agente del FBI Clarice Starling debe ganarse la confianza del brillante psicopata encarcelado Hannibal Lecter para atrapar a otro asesino en serie antes de que mate de nuevo.",
@@ -213,7 +246,10 @@
     "year": 1988,
     "similar_to": ["gone-girl-flynn", "el-resplandor-king"],
     "open_library_key": "/works/OL3360181W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 5,
+    "tropes": ["serial-killer", "cat-and-mouse", "mentor-student", "psychological-warfare", "strong-female-lead"],
+    "pacing": "fast"
   },
   {
     "id": "gone-girl-flynn",
@@ -222,7 +258,7 @@
     "genre": "thriller",
     "subgenre": "domestic-thriller",
     "themes": ["marriage", "deception", "media", "identity", "manipulation"],
-    "mood": "tense",
+    "mood": ["tense", "dark"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "Cuando Amy desaparece el dia de su quinto aniversario, todas las sospechas recaen sobre su esposo Nick, pero la verdad sobre su matrimonio resulta ser mucho mas retorcida de lo que nadie imagina.",
@@ -231,7 +267,10 @@
     "year": 2012,
     "similar_to": ["la-chica-tren-hawkins", "verity-hoover"],
     "open_library_key": "/works/OL16517843W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 5,
+    "tropes": ["unreliable-narrator", "multiple-pov", "marriage-thriller", "plot-twist", "anti-heroine"],
+    "pacing": "fast"
   },
   {
     "id": "la-verdad-harry-quebert-dicker",
@@ -240,7 +279,7 @@
     "genre": "thriller",
     "subgenre": "literary-thriller",
     "themes": ["writing", "justice", "obsession", "small-town-secrets", "truth"],
-    "mood": "tense",
+    "mood": ["tense", "reflective"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "Un joven escritor investiga el caso de asesinato que incrimina a su mentor, el famoso novelista Harry Quebert, desenterrando secretos de treinta anos en un pueblo de Nueva Inglaterra.",
@@ -249,7 +288,10 @@
     "year": 2012,
     "similar_to": ["la-sombra-viento-zafon", "gone-girl-flynn"],
     "open_library_key": "/works/OL17057920W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["cold-case", "mentor-student", "small-town-secrets", "nested-narrative", "unrequited-love"],
+    "pacing": "moderate"
   },
   {
     "id": "verity-hoover",
@@ -258,7 +300,7 @@
     "genre": "thriller",
     "subgenre": "dark-thriller",
     "themes": ["obsession", "trust", "secrets", "writing", "manipulation"],
-    "mood": "dark",
+    "mood": ["dark", "tense"],
     "complexity": "accessible",
     "language": "en",
     "synopsis": "Una escritora en apuros es contratada para terminar la serie de novelas de Verity Crawford, pero al revisar sus notas encuentra un manuscrito autobiografico con verdades escalofriantes.",
@@ -267,7 +309,10 @@
     "year": 2018,
     "similar_to": ["gone-girl-flynn", "la-chica-tren-hawkins"],
     "open_library_key": "/works/OL19987955W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 5,
+    "tropes": ["unreliable-narrator", "manuscript-within-book", "forbidden-romance", "gaslighting", "twist-ending"],
+    "pacing": "fast"
   },
   {
     "id": "orgullo-prejuicio-austen",
@@ -276,7 +321,7 @@
     "genre": "romance",
     "subgenre": "classic-romance",
     "themes": ["pride", "class", "growth", "wit", "social-expectations"],
-    "mood": "light",
+    "mood": ["hopeful", "romantic"],
     "complexity": "moderate",
     "language": "both",
     "synopsis": "Elizabeth Bennet y el orgulloso Mr. Darcy chocan en la Inglaterra rural del siglo XIX, superando sus propios prejuicios y malentendidos en un camino hacia el amor verdadero.",
@@ -285,7 +330,10 @@
     "year": 1813,
     "similar_to": ["normal-people-rooney", "como-agua-chocolate-esquivel"],
     "open_library_key": "/works/OL66554W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 3,
+    "tropes": ["enemies-to-lovers", "class-difference", "slow-burn", "pride-prejudice", "witty-banter"],
+    "pacing": "moderate"
   },
   {
     "id": "normal-people-rooney",
@@ -294,7 +342,7 @@
     "genre": "romance",
     "subgenre": "contemporary-romance",
     "themes": ["class", "communication", "intimacy", "vulnerability", "growing-up"],
-    "mood": "melancholic",
+    "mood": ["melancholic", "reflective"],
     "complexity": "accessible",
     "language": "both",
     "synopsis": "Connell y Marianne se mueven entre la atraccion y la distancia desde el instituto hasta la universidad, explorando como las diferencias de clase y la inseguridad moldean sus vidas entrelazadas.",
@@ -303,7 +351,10 @@
     "year": 2018,
     "similar_to": ["orgullo-prejuicio-austen", "beach-read-henry"],
     "open_library_key": "/works/OL19738941W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["on-off-relationship", "class-difference", "miscommunication", "coming-of-age", "friends-to-lovers"],
+    "pacing": "slow"
   },
   {
     "id": "amor-tiempos-colera-garcia-marquez",
@@ -312,7 +363,7 @@
     "genre": "romance",
     "subgenre": "literary-romance",
     "themes": ["love", "time", "obsession", "aging", "devotion"],
-    "mood": "romantic",
+    "mood": ["romantic", "philosophical", "melancholic"],
     "complexity": "challenging",
     "language": "both",
     "synopsis": "Florentino Ariza espera mas de medio siglo para reunirse con su primer amor, Fermina Daza, en una historia que abarca toda una vida y demuestra que el amor verdadero no conoce limites temporales.",
@@ -321,7 +372,10 @@
     "year": 1985,
     "similar_to": ["cien-anos-soledad-garcia-marquez", "como-agua-chocolate-esquivel"],
     "open_library_key": "/works/OL15052639W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["unrequited-love", "second-chance-romance", "lifelong-devotion", "aging-lovers", "obsession"],
+    "pacing": "slow"
   },
   {
     "id": "beach-read-henry",
@@ -330,7 +384,7 @@
     "genre": "romance",
     "subgenre": "rom-com",
     "themes": ["creativity", "vulnerability", "opposites", "grief", "humor"],
-    "mood": "light",
+    "mood": ["hopeful", "romantic"],
     "complexity": "accessible",
     "language": "en",
     "synopsis": "Dos escritores vecinos de verano con estilos opuestos hacen una apuesta: ella escribira un thriller y el una novela romantica, mientras descubren que las mejores historias nacen de la vulnerabilidad.",
@@ -339,7 +393,10 @@
     "year": 2020,
     "similar_to": ["normal-people-rooney", "orgullo-prejuicio-austen"],
     "open_library_key": "/works/OL21177285W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["enemies-to-lovers", "opposites-attract", "grumpy-sunshine", "writer-protagonists", "bet-wager"],
+    "pacing": "moderate"
   },
   {
     "id": "como-agua-chocolate-esquivel",
@@ -348,7 +405,7 @@
     "genre": "romance",
     "subgenre": "magical-realism-romance",
     "themes": ["passion", "tradition", "food", "rebellion", "family"],
-    "mood": "romantic",
+    "mood": ["romantic", "whimsical"],
     "complexity": "accessible",
     "language": "both",
     "synopsis": "Tita, la hija menor de una familia mexicana, tiene prohibido casarse por tradicion. Canaliza sus emociones prohibidas a traves de la cocina, creando platos que afectan magicamente a quienes los prueban.",
@@ -357,7 +414,10 @@
     "year": 1989,
     "similar_to": ["amor-tiempos-colera-garcia-marquez", "cien-anos-soledad-garcia-marquez"],
     "open_library_key": "/works/OL1855188W",
-    "cover_url": ""
+    "cover_url": "",
+    "maturity_level": 4,
+    "tropes": ["forbidden-love", "family-duty", "magical-realism", "food-as-magic", "cultural-traditions"],
+    "pacing": "moderate"
   },
   {
     "id": "el-resplandor-king",
