@@ -25,19 +25,13 @@ Delegar a `profile-extractor` con el texto completo del usuario.
 - Input: el mensaje raw del usuario (puede ser en espanol o ingles)
 - Output esperado: un objeto JSON `UserProfile` (ver `schemas/user-profile.schema.json`)
 
-### Paso 2: Investigar Libros
-Delegar a `book-researcher` con:
+### Paso 2: Buscar y Recomendar
+Delegar a `book-recommender` con:
 - El JSON de UserProfile obtenido en el Paso 1
-- Instruccion de leer `data/catalog.json` y buscar en Open Library API
-- Output esperado: un array JSON de candidatos (max 20 libros)
-
-### Paso 3: Generar Recomendaciones
-Delegar a `recommendation-engine` con:
-- El JSON de UserProfile del Paso 1
-- El array de CandidateBooks del Paso 2
+- El agente lee `data/catalog.json`, busca en Open Library API, y genera las 3 recomendaciones en un solo paso
 - Output esperado: un objeto JSON `RecommendationResult` con las 3 recomendaciones
 
-### Paso 4: Presentar Resultados
+### Paso 3: Presentar Resultados
 Formatear el RecommendationResult en una respuesta conversacional siguiendo el template en `prompts/recommendation-format.md`:
 - Usar el idioma de interaccion del usuario (campo `interaction_language` del perfil)
 - Presentar cada recomendacion con: titulo, autor, y una explicacion personalizada de por que ese libro
@@ -66,6 +60,7 @@ Usado para seleccionar la categoria secundaria cuando el usuario no especifica u
 - Schemas de datos: `schemas/*.schema.json`
 - Templates de prompts: `prompts/*.md`
 - Documentacion: `docs/`
+- Agentes: `.claude/agents/` (profile-extractor, book-recommender)
 
 ## Convenciones
 - IDs de libros en formato slug: `titulo-autor` (ej: `dune-herbert`)
