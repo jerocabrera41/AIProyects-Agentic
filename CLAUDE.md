@@ -8,23 +8,38 @@ Sistema de recomendación de libros bilingüe (ES/EN) que genera 3 recomendacion
 2. **Discovery** - Sorpresa dentro de la misma categoría (algo inesperado)
 3. **Secondary Match** - Mejor libro en categoría adyacente
 
-## Flujo de Orquestación
+## Flujo de Orquestación (Vector Search)
 
 Cuando usuario describe el libro que quiere:
 
-### Paso 1: Extraer Perfil
-Invocar `profile-extractor` con texto raw del usuario
-- Output: JSON UserProfile (ver `schemas/user-profile.schema.json`)
+### Paso 1: Extraer Criterios
+Invocar `profile-extractor` (Haiku) con texto raw del usuario
+- Output: JSON con genre, maturity_level, tropes, mood, pacing, books_read
+- Consumo: ~500 tokens
 
-### Paso 2: Buscar y Recomendar
-Invocar `book-recommender` con UserProfile del Paso 1
-- Lee: `data/catalog.json`, consulta Open Library API
-- Output: JSON RecommendationResult
+### Paso 2: Vector Search (Programático - 0 tokens)
+Ejecutar script Python con los criterios:
+```bash
+# Guardar criteria JSON en archivo temporal
+# Ejecutar: python scripts/vector_search.py /tmp/criteria.json > top_10.json
+```
+- Filtro programático: genre, maturity, language, books_read
+- Vector similarity: Cosine distance sobre embeddings pre-generados
+- Output: Top 10 candidatos ordenados por similarity score
+- Consumo: **0 tokens** (ejecución local)
 
-### Paso 3: Presentar Resultados
-Formatear respuesta usando `prompts/recommendation-format.md`
+### Paso 3: Presentar Recomendaciones
+YO (Claude principal) leo top_10.json y genero 3 recomendaciones:
+1. **Best Match**: Highest similarity en primary genre
+2. **Discovery**: Alta novelty (tropes NO en user profile) + good similarity
+3. **Secondary Match**: Best en género adyacente o secondary_genres
+
+Formatear usando `prompts/recommendation-format.md`
 - Idioma: usar `interaction_language` del perfil
-- Presentar título, autor, explicación personalizada por cada recomendación
+- Presentar título, autor, score, explicación personalizada
+- Consumo: ~1,200 tokens
+
+**Total**: ~1,700 tokens/recomendación (~115 recomendaciones/sesión vs 15-20 actual)
 
 ## Géneros (MVP)
 sci-fi, fantasy, thriller, romance, horror, literary-fiction
