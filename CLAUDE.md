@@ -33,15 +33,17 @@ python scripts/vector_search.py /tmp/criteria.json > /tmp/top_10.json
 - Consumo: **0 tokens** (ejecución local Python, sin llamadas a Claude)
 
 ### Paso 3: Presentar Recomendaciones
-YO (Claude principal) leo top_10.json y genero 3 recomendaciones:
-1. **Best Match**: Highest similarity en primary genre
-2. **Discovery**: Alta novelty (tropes NO en user profile) + good similarity
-3. **Secondary Match**: Best en género adyacente o secondary_genres
+Invocar `recommendation-presenter` (Haiku) con:
+- Input 1: `/tmp/top_10.json` (del vector search)
+- Input 2: User profile JSON (del profile-extractor)
 
-Formatear usando `prompts/recommendation-format.md`
-- Idioma: usar `interaction_language` del perfil
-- Presentar título, autor, score, explicación personalizada
-- Consumo: ~1,200 tokens
+El agente:
+1. Selecciona 3 libros aplicando lógica de Best Match / Discovery / Secondary Match
+2. Genera explicaciones personalizadas en el idioma del usuario
+3. Formatea según `prompts/recommendation-format.md`
+4. Output: JSON + Markdown para display
+
+Consumo: ~1,200 tokens
 
 **Total**: ~1,700 tokens/recomendación (~115 recomendaciones/sesión vs 15-20 actual)
 
@@ -52,7 +54,7 @@ sci-fi, fantasy, thriller, romance, horror, literary-fiction
 - IDs de libros: `titulo-autor` (lowercase, hyphens)
 - Géneros siempre en inglés kebab-case
 - Explicaciones en idioma del usuario
-- Subagentes devuelven SOLO JSON
+- Agentes devuelven SOLO JSON (salvo recommendation-presenter que retorna JSON + Markdown)
 
 ## Referencias
 - Agentes: `.claude/agents/`

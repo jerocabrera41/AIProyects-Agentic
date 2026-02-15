@@ -40,13 +40,19 @@ Usuario (ES/EN)
     v
 [Main Conversation]
     |
-    | 6. Lee top_10.json y selecciona 3 recomendaciones:
-    |      - Best Match: highest similarity en primary genre
-    |      - Discovery: alta novelty (tropes NO en perfil) + good similarity
-    |      - Secondary Match: best en género adyacente
-    | 7. Formatea según prompts/recommendation-format.md (~1,200 tokens)
-    | 8. Presenta al usuario en su idioma
-    | 9. Pregunta si quiere más detalles o nuevas recomendaciones
+    | 6. Invoca recommendation-presenter con top_10.json + user profile
+    v
+[recommendation-presenter] (haiku, Read)
+    |  Lee top_10.json y user profile
+    |  Selecciona 3 libros (Best Match / Discovery / Secondary Match)
+    |  Genera explicaciones personalizadas
+    |  Formatea según prompts/recommendation-format.md
+    |  Output: JSON + Markdown (~1,200 tokens)
+    v
+[Main Conversation]
+    |
+    | 7. Presenta markdown al usuario
+    | 8. Pregunta si quiere más detalles o nuevas recomendaciones
     v
 Usuario recibe 3 recomendaciones personalizadas
 
@@ -80,10 +86,21 @@ Total consumo: ~1,700 tokens por recomendación
 - **Responsabilidad**:
   - Orquestar flujo completo
   - Ejecutar `python scripts/vector_search.py` vía Bash
-  - Leer `top_10.json` y seleccionar 3 recomendaciones finales
-  - Formatear según `prompts/recommendation-format.md`
-  - Presentar al usuario en su idioma
-- **Consumo**: ~1,200 tokens (presentación de recomendaciones)
+  - Invocar recommendation-presenter con top_10.json y user profile
+  - Presentar markdown formateado al usuario
+- **Consumo**: ~200 tokens (solo orquestación, sin lógica de presentación)
+
+### recommendation-presenter (Subagente)
+- **Archivo**: `.claude/agents/recommendation-presenter.md`
+- **Modelo**: Haiku (rápido, tarea estructurada)
+- **Tools**: Read
+- **Responsabilidad**:
+  - Leer top_10.json y user profile JSON
+  - Seleccionar 3 libros con lógica de Best Match / Discovery / Secondary Match
+  - Generar explicaciones personalizadas en idioma del usuario
+  - Formatear según prompts/recommendation-format.md
+- **Consumo**: ~1,200 tokens
+- **Por qué separado**: Separa orquestación (Main) de presentación (agente). Prompt especializado en selección y tone.
 
 ## Schemas de Datos
 

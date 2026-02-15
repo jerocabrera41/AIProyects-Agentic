@@ -27,7 +27,7 @@ Ver [docs/installation.md](docs/installation.md) para guia completa de instalaci
 ├── .claude/
 │   └── agents/
 │       ├── profile-extractor.md           # Extrae perfil del usuario (Haiku, ~500 tokens)
-│       └── book-recommender.md            # Presenta recomendaciones finales
+│       └── recommendation-presenter.md    # Selecciona y presenta 3 recomendaciones (Haiku, ~1,200 tokens)
 ├── scripts/
 │   ├── generate_embeddings.py             # Genera embeddings de 384-dim (one-time)
 │   ├── vector_search.py                   # Busqueda semantica (0 tokens)
@@ -78,7 +78,7 @@ claude
 
 Verificar agentes cargados con `/agents`:
 - profile-extractor (Haiku)
-- book-recommender
+- recommendation-presenter (Haiku)
 
 ### 3. Describir preferencias
 
@@ -98,8 +98,8 @@ I love dark fantasy and horror. Looking for something complex and intense.
 ### 4. Flujo del Sistema (3 pasos, ~1,700 tokens)
 
 1. **profile-extractor (Haiku)** → Extrae criterios (genero, tropes, mood, pacing) → JSON (~500 tokens)
-2. **Python vector_search.py** → Filtra + busqueda semantica → Top 10 candidatos (0 tokens)
-3. **Claude** → Lee top 10 + genera 3 recomendaciones personalizadas (~1,200 tokens)
+2. **vector_search.py (Python)** → Busca top-10 candidatos por similitud coseno → JSON (0 tokens)
+3. **recommendation-presenter (Haiku)** → Selecciona 3 recomendaciones y formatea → JSON + Markdown (~1,200 tokens)
 
 **Resultado**: 3 recomendaciones con explicaciones detalladas en tu idioma.
 
