@@ -26,8 +26,8 @@ Ver [docs/installation.md](docs/installation.md) para guia completa de instalaci
 ├── CLAUDE.md                              # Instrucciones de orquestacion del sistema
 ├── .claude/
 │   └── agents/
-│       ├── profile-extractor.md           # Extrae perfil del usuario (Haiku, ~500 tokens)
-│       └── recommendation-presenter.md    # Selecciona y presenta 3 recomendaciones (Haiku, ~1,200 tokens)
+│       ├── profile-extractor.md           # Guía de reglas para extracción de criterios
+│       └── recommendation-presenter.md    # Guía de reglas para selección y presentación
 ├── scripts/
 │   ├── generate_embeddings.py             # Genera embeddings de 384-dim (one-time)
 │   ├── vector_search.py                   # Busqueda semantica (0 tokens)
@@ -76,10 +76,6 @@ cd "C:\Users\jeroc\Proyectos AI\Test1- Agente Recomendador de Libros"
 claude
 ```
 
-Verificar agentes cargados con `/agents`:
-- profile-extractor (Haiku)
-- recommendation-presenter (Haiku)
-
 ### 3. Describir preferencias
 
 Simplemente describe que tipo de libro buscas:
@@ -97,9 +93,22 @@ I love dark fantasy and horror. Looking for something complex and intense.
 
 ### 4. Flujo del Sistema (3 pasos, ~1,700 tokens)
 
-1. **profile-extractor (Haiku)** → Extrae criterios (genero, tropes, mood, pacing) → JSON (~500 tokens)
-2. **vector_search.py (Python)** → Busca top-10 candidatos por similitud coseno → JSON (0 tokens)
-3. **recommendation-presenter (Haiku)** → Selecciona 3 recomendaciones y formatea → JSON + Markdown (~1,200 tokens)
+Claude principal ejecuta directamente:
+
+1. **Extracción de criterios** (siguiendo `.claude/agents/profile-extractor.md`)
+   - Analiza input del usuario
+   - Genera criteria.json con genre, tropes, mood, pacing, books_read
+
+2. **Vector search** (Python local - 0 tokens)
+   - Ejecuta: `python scripts/vector_search.py .cache/criteria.json`
+   - Retorna top-10 candidatos
+
+3. **Presentación** (siguiendo `.claude/agents/recommendation-presenter.md`)
+   - Selecciona 3 libros (Best Match, Discovery, Secondary Match)
+   - Genera explicaciones personalizadas
+   - Formatea markdown bilingüe
+
+**Total**: ~1,700 tokens (sin overhead de subagentes)
 
 **Resultado**: 3 recomendaciones con explicaciones detalladas en tu idioma.
 

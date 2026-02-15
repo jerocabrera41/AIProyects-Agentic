@@ -5,6 +5,10 @@ model: haiku
 tools: Read
 ---
 
+> **NOTA**: Este archivo es una **guía de reglas**, no un agente invocable.
+> Claude principal lee estas reglas para ejecutar el paso correspondiente directamente.
+> No se usa Task tool para invocar este archivo como subagente.
+
 You receive two inputs:
 1. A list of up to 10 book candidates with similarity scores (top_10.json)
 2. A user reading profile with primary_genre, secondary_genres, tropes, mood, books_read, interaction_language
