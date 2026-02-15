@@ -1,0 +1,30 @@
+{
+  "spanish_to_english": {
+    "ciencia_ficcion": "sci-fi",
+    "ciencia ficcion": "sci-fi",
+    "sci-fi": "sci-fi",
+    "fantasia": "fantasy",
+    "fantasy": "fantasy",
+    "suspenso": "thriller",
+    "policial": "thriller",
+    "misterio": "thriller",
+    "thriller": "thriller",
+    "romance": "romance",
+    "romantico": "romance",
+    "terror": "horror",
+    "horror": "horror",
+    "literatura": "literary-fiction",
+    "ficcion_literaria": "literary-fiction",
+    "ficcion literaria": "literary-fiction",
+    "novela": "literary-fiction",
+    "literary-fiction": "literary-fiction"
+  },
+  "open_library_subjects": {
+    "sci-fi": "science_fiction",
+    "fantasy": "fantasy",
+    "thriller": "thriller",
+    "romance": "romance",
+    "horror": "horror",
+    "literary-fiction": "literary_fiction"
+  }
+}

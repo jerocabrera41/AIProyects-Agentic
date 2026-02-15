@@ -59,26 +59,16 @@ For each API result, create a book object:
 
 ### Step 4: Score and Select Recommendations
 
-Evaluate each candidate using these weighted dimensions:
+Weighted scoring (normalize each to 0-1):
+- **Genre match** (30%): Primary=1.0, Secondary=0.5, Other=0.0
+- **Theme overlap** (25%): (shared/max_themes) - (0.2 × disliked_matches)
+- **Mood** (15%): Exact=1.0, Adjacent=0.5, Mismatch=0.2, any=0.7
+- **Complexity** (10%): Exact=1.0, OneStep=0.5, Other=0.0, any=0.7
+- **Language** (10%): Match=1.0, any/both=1.0, Mismatch=0.0
+- **Not read** (10%): Not read=1.0, Read=DISQUALIFY
 
-| Dimension        | Weight | Scoring Logic                                                    |
-|------------------|--------|------------------------------------------------------------------|
-| Genre match      | 30%    | Primary genre = 1.0; Secondary genre = 0.5; Other = 0.0         |
-| Theme overlap    | 25%    | (shared themes / max(user themes count, 1)) minus 0.2 per disliked theme match |
-| Mood alignment   | 15%    | Exact = 1.0; Adjacent = 0.5; Mismatch = 0.2; "any" on either side = 0.7 |
-| Complexity fit   | 10%    | Exact = 1.0; One step away = 0.5; Two steps = 0.0; "any" = 0.7  |
-| Language match   | 10%    | Available in preferred lang = 1.0; "both"/"any" = 1.0; Mismatch = 0.0 |
-| Not already read | 10%    | Not in books_read = 1.0; In books_read = DISQUALIFY entirely     |
-
-#### Mood Adjacency Groups
-- [dark, tense]
-- [light, whimsical]
-- [adventurous]
-- [reflective, melancholic]
-- [romantic]
-
-#### Complexity Ordering
-accessible < moderate < challenging
+Mood groups: [dark,tense], [light,whimsical], [adventurous], [reflective,melancholic], [romantic]
+Complexity order: accessible < moderate < challenging
 
 ### Step 5: Select 3 Recommendations
 
@@ -107,47 +97,17 @@ accessible < moderate < challenging
 - No book in more than one slot
 - Priority: Best Match > Discovery > Secondary Match
 
-## Genre Adjacency Map
-- sci-fi <-> fantasy, literary-fiction
-- fantasy <-> sci-fi, horror
-- thriller <-> horror, literary-fiction
-- romance <-> literary-fiction, fantasy
-- horror <-> thriller, fantasy
-- literary-fiction <-> all genres
+## Genre Adjacency
+See `data/genre-adjacency.json`
 
-## Output Format
-Return ONLY valid JSON matching this structure. No markdown fences, no extra text:
-
-```
+## Output (JSON ONLY, no markdown)
+```json
 {
-  "best_match": {
-    "book": {
-      "id": "book-id",
-      "title": "Book Title",
-      "author": "Author Name",
-      "genre": "genre",
-      "synopsis": "Brief synopsis if available",
-      "cover_url": "URL or empty string"
-    },
-    "type": "best_match",
-    "score": 0.85,
-    "explanation": "Personalized explanation in user's interaction_language",
-    "match_reasons": ["theme:survival", "mood:dark"]
-  },
-  "discovery": { ... },
-  "secondary_match": { ... },
-  "metadata": {
-    "total_candidates_evaluated": 15,
-    "primary_genre": "sci-fi",
-    "secondary_genre_used": "fantasy",
-    "interaction_language": "es"
-  }
+  "best_match": {"book": {"id": "...", "title": "...", "author": "...", "genre": "...", "synopsis": "", "cover_url": ""}, "type": "best_match", "score": 0.85, "explanation": "2-3 sentences in user's language", "match_reasons": ["theme:X", "mood:Y"]},
+  "discovery": {...},
+  "secondary_match": {...},
+  "metadata": {"total_candidates_evaluated": 15, "primary_genre": "sci-fi", "secondary_genre_used": "fantasy", "interaction_language": "es"}
 }
 ```
 
-## Language Rules for Explanations
-- Write ALL explanations in the user's `interaction_language` (es or en)
-- If "es": Natural, warm Spanish. Enthusiastic but not over the top.
-- If "en": Natural, warm English.
-- Present book titles in their original language.
-- Keep each explanation to 2-3 sentences maximum. Be specific about WHY.
+Explanations: 2-3 sentences, user's `interaction_language` (es/en), warm and specific.
