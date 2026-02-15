@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserProfile",
+  "description": "Structured representation of user reading preferences extracted from conversation",
+  "type": "object",
+  "required": ["primary_genre", "language_preference", "interaction_language"],
+  "properties": {
+    "primary_genre": {
+      "type": "string",
+      "enum": ["sci-fi", "fantasy", "thriller", "romance", "horror", "literary-fiction"],
+      "description": "The user's main genre interest"
+    },
+    "secondary_genres": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["sci-fi", "fantasy", "thriller", "romance", "horror", "literary-fiction"]
+      },
+      "description": "Adjacent genres the user might enjoy"
+    },
+    "themes_liked": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Themes the user explicitly enjoys (e.g., ['time-travel', 'strong-female-lead'])"
+    },
+    "themes_disliked": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Themes the user wants to avoid (e.g., ['graphic-violence', 'love-triangles'])"
+    },
+    "mood_preference": {
+      "type": "string",
+      "enum": ["dark", "light", "adventurous", "reflective", "tense", "romantic", "whimsical", "melancholic", "any"],
+      "description": "Desired emotional tone"
+    },
+    "complexity_preference": {
+      "type": "string",
+      "enum": ["accessible", "moderate", "challenging", "any"],
+      "description": "Desired reading difficulty"
+    },
+    "language_preference": {
+      "type": "string",
+      "enum": ["es", "en", "any"],
+      "description": "Preferred book language"
+    },
+    "books_read": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Books the user has already read (to avoid recommending them)"
+    },
+    "books_liked": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Books the user explicitly loved (for taste inference)"
+    },
+    "books_disliked": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Books the user did not enjoy (for negative preference inference)"
+    },
+    "interaction_language": {
+      "type": "string",
+      "enum": ["es", "en"],
+      "description": "Language the user is chatting in (for response formatting)"
+    },
+    "raw_input": {
+      "type": "string",
+      "description": "Original user message preserved for context"
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RecommendationResult",
+  "description": "Three personalized book recommendations with explanations",
+  "type": "object",
+  "required": ["best_match", "discovery", "secondary_match", "metadata"],
+  "properties": {
+    "best_match": { "$ref": "#/$defs/Recommendation" },
+    "discovery": { "$ref": "#/$defs/Recommendation" },
+    "secondary_match": { "$ref": "#/$defs/Recommendation" },
+    "metadata": {
+      "type": "object",
+      "required": ["total_candidates_evaluated", "primary_genre", "secondary_genre_used", "interaction_language"],
+      "properties": {
+        "total_candidates_evaluated": {
+          "type": "integer",
+          "description": "Number of candidate books that were scored"
+        },
+        "primary_genre": {
+          "type": "string",
+          "description": "The user's primary genre used for Best Match and Discovery"
+        },
+        "secondary_genre_used": {
+          "type": "string",
+          "description": "The genre used for Secondary Match selection"
+        },
+        "interaction_language": {
+          "type": "string",
+          "enum": ["es", "en"],
+          "description": "Language used for explanations"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Recommendation": {
+      "type": "object",
+      "required": ["book", "type", "score", "explanation"],
+      "properties": {
+        "book": {
+          "type": "object",
+          "required": ["id", "title", "author", "genre"],
+          "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "genre": { "type": "string" },
+            "synopsis": { "type": "string" },
+            "cover_url": { "type": "string" }
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": ["best_match", "discovery", "secondary_match"]
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Overall match score from 0.0 to 1.0"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Personalized explanation in the user's interaction language"
+        },
+        "match_reasons": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Specific reasons this book was chosen (e.g., ['theme:survival', 'mood:dark'])"
+        }
+      }
+    }
+  }
+}

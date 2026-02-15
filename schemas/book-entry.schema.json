@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BookEntry",
+  "description": "A single book in the local curated catalog",
+  "type": "object",
+  "required": ["id", "title", "author", "genre", "language"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier in slug format (e.g., 'dune-herbert')"
+    },
+    "title": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string",
+      "enum": ["sci-fi", "fantasy", "thriller", "romance", "horror", "literary-fiction"],
+      "description": "Primary genre classification"
+    },
+    "subgenre": {
+      "type": "string",
+      "description": "More specific classification (e.g., 'space-opera', 'dark-fantasy', 'psychological-thriller')"
+    },
+    "themes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Key themes (e.g., ['identity', 'power', 'survival', 'love'])"
+    },
+    "mood": {
+      "type": "string",
+      "enum": ["dark", "light", "adventurous", "reflective", "tense", "romantic", "whimsical", "melancholic"],
+      "description": "Overall emotional tone of the book"
+    },
+    "complexity": {
+      "type": "string",
+      "enum": ["accessible", "moderate", "challenging"],
+      "description": "Reading difficulty level"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["es", "en", "both"],
+      "description": "Language(s) the book is available in. 'both' means editions exist in both."
+    },
+    "synopsis": {
+      "type": "string",
+      "description": "2-3 sentence spoiler-free synopsis"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Freeform tags for matching (e.g., ['classic', 'page-turner', 'series', 'standalone', 'award-winner'])"
+    },
+    "pages": {
+      "type": "integer",
+      "description": "Approximate page count"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Original publication year"
+    },
+    "similar_to": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of similar books in the catalog for graph-based discovery"
+    },
+    "open_library_key": {
+      "type": "string",
+      "description": "Open Library work key (e.g., '/works/OL45804W') for API enrichment"
+    },
+    "cover_url": {
+      "type": "string",
+      "description": "URL to cover image from Open Library Covers API"
+    }
+  }
+}
