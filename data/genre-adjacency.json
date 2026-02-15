@@ -1,0 +1,11 @@
+{
+  "adjacency_map": {
+    "sci-fi": ["fantasy", "literary-fiction"],
+    "fantasy": ["sci-fi", "horror"],
+    "thriller": ["horror", "literary-fiction"],
+    "romance": ["literary-fiction", "fantasy"],
+    "horror": ["thriller", "fantasy"],
+    "literary-fiction": ["sci-fi", "fantasy", "thriller", "romance", "horror"]
+  },
+  "description": "Genre adjacency relationships for secondary category selection"
+}
