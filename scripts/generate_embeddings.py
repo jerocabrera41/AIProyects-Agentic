@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Generate vector embeddings for book catalog using sentence-transformers.
 Combines book metadata (title, author, genre, tropes, mood, pacing) into
@@ -9,6 +10,12 @@ from sentence_transformers import SentenceTransformer
 import json
 import sys
 from pathlib import Path
+
+# Fix encoding for Windows console
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
 
 
 def generate_book_embedding(book, model):
@@ -40,11 +47,11 @@ def main():
     catalog_path = project_root / 'data' / 'catalog.json'
     output_path = project_root / 'data' / 'catalog_with_embeddings.json'
 
-    print("🔧 Loading sentence-transformers model (all-MiniLM-L6-v2)...")
+    print("[*] Loading sentence-transformers model (all-MiniLM-L6-v2)...")
     model = SentenceTransformer('all-MiniLM-L6-v2')
-    print("✓ Model loaded successfully\n")
+    print("[OK] Model loaded successfully\n")
 
-    print(f"📖 Reading catalog from {catalog_path}...")
+    print(f"[*] Reading catalog from {catalog_path}...")
     with open(catalog_path, 'r', encoding='utf-8') as f:
         catalog = json.load(f)
 
@@ -54,17 +61,17 @@ def main():
     elif isinstance(catalog, dict) and 'books' in catalog:
         books = catalog['books']
     else:
-        print("❌ Error: Catalog format not recognized")
+        print("[ERROR] Catalog format not recognized")
         sys.exit(1)
 
-    print(f"✓ Found {len(books)} books\n")
+    print(f"[OK] Found {len(books)} books\n")
 
-    print("🧮 Generating embeddings...")
+    print("[*] Generating embeddings...")
     for i, book in enumerate(books, 1):
         print(f"  [{i:2d}/{len(books)}] {book['title']:<50} by {book['author']}")
         book['embedding'] = generate_book_embedding(book, model)
 
-    print("\n💾 Writing catalog with embeddings...")
+    print("\n[*] Writing catalog with embeddings...")
 
     # Preserve original format
     if isinstance(catalog, list):
@@ -79,10 +86,10 @@ def main():
     # Calculate size
     size_kb = output_path.stat().st_size // 1024
 
-    print(f"✓ Done! Embeddings saved to {output_path}")
-    print(f"  Total size: {size_kb}KB")
-    print(f"  Books: {len(books)}")
-    print(f"  Embedding dimensions: {len(books[0]['embedding'])}")
+    print(f"[OK] Done! Embeddings saved to {output_path}")
+    print(f"     Total size: {size_kb}KB")
+    print(f"     Books: {len(books)}")
+    print(f"     Embedding dimensions: {len(books[0]['embedding'])}")
 
 
 if __name__ == '__main__':
