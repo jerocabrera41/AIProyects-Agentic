@@ -1,3 +1,7 @@
+> **LEGACY DOCUMENTATION**
+> Esta documentación describe la integración con Open Library API que se usó en versiones anteriores del proyecto.
+> **Estado actual**: Ya no se usa. Reemplazado por vector search programático (ver `docs/architecture.md`).
+
 # Open Library API - Referencia Rapida
 
 ## Endpoints Utilizados

@@ -18,15 +18,19 @@ Invocar `profile-extractor` (Haiku) con texto raw del usuario
 - Consumo: ~500 tokens
 
 ### Paso 2: Vector Search (Programático - 0 tokens)
-Ejecutar script Python con los criterios:
+YO (Claude principal) ejecuto:
 ```bash
-# Guardar criteria JSON en archivo temporal
-# Ejecutar: python scripts/vector_search.py /tmp/criteria.json > top_10.json
+# 1. Escribir criteria JSON a archivo temporal
+echo '$CRITERIA_JSON' > /tmp/criteria.json
+
+# 2. Ejecutar vector search y capturar top-10
+python scripts/vector_search.py /tmp/criteria.json > /tmp/top_10.json
 ```
-- Filtro programático: genre, maturity, language, books_read
-- Vector similarity: Cosine distance sobre embeddings pre-generados
-- Output: Top 10 candidatos ordenados por similarity score
-- Consumo: **0 tokens** (ejecución local)
+- Input: JSON del profile-extractor (`/tmp/criteria.json`)
+- Filtros aplicados: genre, maturity_level, language, books_read
+- Algoritmo: Cosine similarity sobre embeddings pre-generados (384-dim, all-MiniLM-L6-v2)
+- Output: Top 10 candidatos con similarity scores (`/tmp/top_10.json`)
+- Consumo: **0 tokens** (ejecución local Python, sin llamadas a Claude)
 
 ### Paso 3: Presentar Recomendaciones
 YO (Claude principal) leo top_10.json y genero 3 recomendaciones:
