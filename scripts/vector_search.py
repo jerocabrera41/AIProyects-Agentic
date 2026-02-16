@@ -7,9 +7,13 @@ cosine similarity on pre-computed embeddings.
 
 import json
 import sys
+import os
+import io
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from pathlib import Path
+
+os.environ['TRANSFORMERS_NO_ADVISORY_WARNINGS'] = '1'
+os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
 
 
 def cosine_similarity(a, b):
@@ -28,7 +32,40 @@ def filter_books(books, criteria):
     # Filter 2: Maturity level (>=)
     if 'maturity_level' in criteria and criteria['maturity_level']:
         min_maturity = criteria['maturity_level']
-        filtered = [b for b in filtered if b.get('maturity_level', 3) >= min_maturity]
+        filtered = [b for b in filtered if b.get('maturity_level', 4) >= min_maturity]
+
+    # Filter 3: Language preference
+    if 'language_preference' in criteria and criteria['language_preference'] != 'any':
+        lang = criteria['language_preference']
+        filtered = [
+            b for b in filtered
+            if b.get('language', 'en') == lang
+            or b.get('language') == 'both'
+            or b.get('language') == 'any'
+        ]
+
+    # Filter 4: Exclude already read books
+    if 'books_read' in criteria and criteria['books_read']:
+        read_titles_lower = [title.lower() for title in criteria['books_read']]
+        filtered = [b for b in filtered if b['title'].lower() not in read_titles_lower]
+
+    return filtered
+
+
+def filter_books_by_genre(books, genre, criteria):
+    """
+    Filter books by a specific genre while applying other criteria filters.
+    Similar to filter_books but allows specifying the genre instead of using primary_genre.
+    """
+    filtered = books
+
+    # Filter 1: Specific genre
+    filtered = [b for b in filtered if b.get('genre') == genre]
+
+    # Filter 2: Maturity level (>=)
+    if 'maturity_level' in criteria and criteria['maturity_level']:
+        min_maturity = criteria['maturity_level']
+        filtered = [b for b in filtered if b.get('maturity_level', 4) >= min_maturity]
 
     # Filter 3: Language preference
     if 'language_preference' in criteria and criteria['language_preference'] != 'any':
@@ -147,28 +184,72 @@ def main():
         print("❌ Error: Catalog format not recognized", file=sys.stderr)
         sys.exit(1)
 
-    # Load sentence-transformers model
+    # Load sentence-transformers model (suppress stdout to keep JSON output clean)
     print("🔧 Loading model...", file=sys.stderr)
+    _stdout = sys.stdout
+    sys.stdout = io.StringIO()
+    from sentence_transformers import SentenceTransformer
     model = SentenceTransformer('all-MiniLM-L6-v2')
+    sys.stdout = _stdout
 
-    # 1. Apply programmatic filters
-    filtered = filter_books(books, criteria)
-    print(f"📊 Filtered to {len(filtered)} candidates (from {len(books)} total)", file=sys.stderr)
-
-    if not filtered:
-        print("⚠️  No books match the criteria", file=sys.stderr)
-        print(json.dumps([]))
-        sys.exit(0)
+    # 1. Apply programmatic filters for primary genre
+    primary_filtered = filter_books(books, criteria)
+    print(f"📊 Primary genre filtered: {len(primary_filtered)} candidates", file=sys.stderr)
 
     # 2. Build query text
     query_text = build_query_text(criteria)
     print(f"🔍 Query: \"{query_text}\"", file=sys.stderr)
 
-    # 3. Vector similarity search
-    top_candidates = vector_search(filtered, query_text, model, top_k=10)
+    # 3. Vector similarity search on primary genre
+    primary_results = vector_search(primary_filtered, query_text, model, top_k=10)
 
-    # 4. Output JSON to stdout
-    print(json.dumps(top_candidates, indent=2, ensure_ascii=False))
+    # Tag primary results
+    for book in primary_results:
+        book['genre_pool'] = 'primary'
+
+    # 4. Secondary genre search (if secondary_genres exist in criteria)
+    secondary_results = []
+    if 'secondary_genres' in criteria and criteria['secondary_genres']:
+        print(f"🔍 Secondary genres: {criteria['secondary_genres']}", file=sys.stderr)
+
+        # Collect IDs of primary results to avoid duplicates
+        primary_ids = set(book['id'] for book in primary_results)
+
+        # Search each secondary genre
+        for secondary_genre in criteria['secondary_genres']:
+            genre_filtered = filter_books_by_genre(books, secondary_genre, criteria)
+            # Remove books already in primary results
+            genre_filtered = [b for b in genre_filtered if b['id'] not in primary_ids]
+
+            if genre_filtered:
+                genre_results = vector_search(genre_filtered, query_text, model, top_k=5)
+                secondary_results.extend(genre_results)
+
+        # Sort combined secondary results by similarity and take top 5
+        secondary_results.sort(key=lambda b: b.get('similarity', 0), reverse=True)
+        secondary_results = secondary_results[:5]
+
+        # Tag secondary results
+        for book in secondary_results:
+            book['genre_pool'] = 'secondary'
+
+        print(f"📊 Secondary genre filtered: {len(secondary_results)} candidates", file=sys.stderr)
+
+    # 5. Combine results (primary + secondary)
+    all_results = primary_results + secondary_results
+    print(f"📊 Total candidates: {len(all_results)} (primary: {len(primary_results)}, secondary: {len(secondary_results)})", file=sys.stderr)
+
+    if not all_results:
+        print("⚠️  No books match the criteria", file=sys.stderr)
+        print(json.dumps([]))
+        sys.exit(0)
+
+    # 6. Strip embeddings from output (not needed downstream, saves ~70KB)
+    for book in all_results:
+        book.pop('embedding', None)
+
+    # 7. Output JSON to stdout
+    print(json.dumps(all_results, indent=2, ensure_ascii=False))
 
 
 if __name__ == '__main__':

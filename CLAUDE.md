@@ -8,44 +8,102 @@ Sistema de recomendación de libros bilingüe (ES/EN) que genera 3 recomendacion
 2. **Discovery** - Sorpresa dentro de la misma categoría (algo inesperado)
 3. **Secondary Match** - Mejor libro en categoría adyacente
 
-## Flujo de Orquestación (Vector Search)
+## Available Tools
 
-Cuando usuario describe el libro que quiere:
+### 1. extract_profile
+**Purpose:** Extract structured criteria from natural language user input
+
+**Invocation:**
+```bash
+python scripts/extract_profile.py "<user_input>"
+```
+
+**Input:** String with user's reading preferences (ES or EN)
+
+**Output:** JSON to stdout
+```json
+{"status": "success", "file": ".cache/criteria.json", "tokens_used": 520}
+```
+
+**Token consumption:** ~500 tokens (Haiku)
+
+**When to use:** Whenever user describes their reading preferences
+
+### 2. vector_search
+**Purpose:** Find similar books using cosine similarity on pre-computed embeddings
+
+**Invocation:**
+```bash
+python scripts/vector_search.py .cache/criteria.json > .cache/search_results.json
+```
+
+**Input:** Path to criteria JSON file
+
+**Output:** JSON array of top-15 candidates (10 primary + 5 secondary genre) to stdout
+
+**Token consumption:** 0 tokens (local Python execution)
+
+**When to use:** After extract_profile completes successfully
+
+**Note:** Now returns both primary and secondary genre candidates for comprehensive recommendations
+
+### 3. present_recommendations
+**Purpose:** Select 3 personalized recommendations and format output
+
+**Invocation:**
+```bash
+python scripts/present_recommendations.py \
+  --criteria .cache/criteria.json \
+  --results .cache/search_results.json
+```
+
+**Input:** Two JSON files (criteria + search results)
+
+**Output:** Markdown formatted recommendations to stdout
+
+**Token consumption:** ~1,200 tokens (Sonnet)
+
+**When to use:** After vector_search completes successfully
+
+## Flujo de Orquestación (Tool-Based)
+
+Cuando usuario describe el libro que quiere, ejecuto los 3 pasos usando las tools disponibles:
 
 ### Paso 1: Extraer Criterios
-Invocar `profile-extractor` (Haiku) con texto raw del usuario
-- Output: JSON con genre, maturity_level, tropes, mood, pacing, books_read
-- Consumo: ~500 tokens
+```bash
+python scripts/extract_profile.py "<user_input>"
+```
+- Script usa Haiku API para extraer perfil estructurado
+- Genera el JSON de criterios (genre, maturity_level, tropes, mood, pacing, books_read)
+- Escribe el JSON a `.cache/criteria.json`
+- Consumo: **~500 tokens** (Haiku API call)
 
 ### Paso 2: Vector Search (Programático - 0 tokens)
-YO (Claude principal) ejecuto:
 ```bash
-# 1. Escribir criteria JSON a archivo temporal
-echo '$CRITERIA_JSON' > /tmp/criteria.json
-
-# 2. Ejecutar vector search y capturar top-10
-python scripts/vector_search.py /tmp/criteria.json > /tmp/top_10.json
+python scripts/vector_search.py .cache/criteria.json > .cache/search_results.json
 ```
-- Input: JSON del profile-extractor (`/tmp/criteria.json`)
 - Filtros aplicados: genre, maturity_level, language, books_read
 - Algoritmo: Cosine similarity sobre embeddings pre-generados (384-dim, all-MiniLM-L6-v2)
-- Output: Top 10 candidatos con similarity scores (`/tmp/top_10.json`)
+- Output: Top 15 candidatos (10 primary + 5 secondary) con similarity scores
 - Consumo: **0 tokens** (ejecución local Python, sin llamadas a Claude)
 
 ### Paso 3: Presentar Recomendaciones
-Invocar `recommendation-presenter` (Haiku) con:
-- Input 1: `/tmp/top_10.json` (del vector search)
-- Input 2: User profile JSON (del profile-extractor)
+```bash
+python scripts/present_recommendations.py \
+  --criteria .cache/criteria.json \
+  --results .cache/search_results.json
+```
+- Script usa Sonnet API para seleccionar y formatear recomendaciones
+- Aplica lógica de Best Match / Discovery / Secondary Match
+- Genera explicaciones personalizadas en el idioma del usuario
+- Formatea según `prompts/recommendation-format.md`
+- Consumo: **~1,200 tokens** (Sonnet API call)
 
-El agente:
-1. Selecciona 3 libros aplicando lógica de Best Match / Discovery / Secondary Match
-2. Genera explicaciones personalizadas en el idioma del usuario
-3. Formatea según `prompts/recommendation-format.md`
-4. Output: JSON + Markdown para display
-
-Consumo: ~1,200 tokens
-
-**Total**: ~1,700 tokens/recomendación (~115 recomendaciones/sesión vs 15-20 actual)
+### Ventajas
+- **Token reduction:** ~51% reduction (from ~3,500 to ~1,700 tokens per full pipeline)
+- **Cost efficiency:** Haiku for extraction (~$0.13/MTok), Sonnet for presentation (~$3/MTok)
+- **Modularity:** Each tool is testable and reusable independently
+- **No subagent overhead:** Direct tool invocation via bash commands
 
 ## Géneros (MVP)
 sci-fi, fantasy, thriller, romance, horror, literary-fiction
@@ -54,7 +112,7 @@ sci-fi, fantasy, thriller, romance, horror, literary-fiction
 - IDs de libros: `titulo-autor` (lowercase, hyphens)
 - Géneros siempre en inglés kebab-case
 - Explicaciones en idioma del usuario
-- Agentes devuelven SOLO JSON (salvo recommendation-presenter que retorna JSON + Markdown)
+- Reglas de extracción y presentación: `.claude/agents/` (referencia, no se invocan como subagentes)
 
 ## Referencias
 - Agentes: `.claude/agents/`

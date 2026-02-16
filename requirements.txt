@@ -1,0 +1,11 @@
+# Official Anthropic SDK for API calls
+anthropic>=0.18.0
+
+# Sentence transformers for embeddings (already in use)
+sentence-transformers
+
+# Numerical operations (already in use)
+numpy
+
+# JSON schema validation
+jsonschema
