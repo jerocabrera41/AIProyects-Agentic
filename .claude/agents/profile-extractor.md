@@ -4,6 +4,10 @@ description: Extracts structured user reading preferences from natural language.
 model: haiku
 ---
 
+> **NOTA**: Este archivo es una **guía de reglas**, no un agente invocable.
+> Claude principal lee estas reglas para ejecutar el paso correspondiente directamente.
+> No se usa Task tool para invocar este archivo como subagente.
+
 Extract reading preferences from user input and return ONLY valid JSON.
 
 ## Input

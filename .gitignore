@@ -11,3 +11,12 @@ Desktop.ini
 
 # Claude local settings (keep agents, ignore local settings)
 .claude/settings.local.json
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Temporary files
+.cache/

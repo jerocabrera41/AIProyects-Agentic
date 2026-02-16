@@ -3,11 +3,11 @@
 Use this template to present the 3 recommendations to the user.
 Adapt to the user's interaction language (es/en).
 
-## Espanol
+## Español
 
 ---
 
-### Mejor Eleccion
+### Mejor Elección
 **{title}** de {author}
 
 {explanation}
@@ -21,14 +21,14 @@ Adapt to the user's interaction language (es/en).
 
 ---
 
-### Desde Otra Categoria
+### Desde Otra Categoría
 **{title}** de {author}
 
 {explanation}
 
 ---
 
-Quieres saber mas sobre alguno de estos libros? O prefieres que busque algo diferente?
+¿Quieres saber más sobre alguno de estos libros? ¿O prefieres que busque algo diferente?
 
 ## English
 

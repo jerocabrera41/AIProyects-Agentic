@@ -2,7 +2,7 @@
 
 ## Vision General
 
-Sistema de recomendacion de libros que usa 2 subagentes de Claude Code orquestados por una conversacion principal (lead). El flujo es secuencial: extraer perfil -> buscar y recomendar (un solo paso).
+Sistema de recomendación de libros donde Claude principal ejecuta directamente los 3 pasos (extracción, vector search, presentación), usando archivos en `.claude/agents/` como guías de reglas. Sin overhead de subagentes para máxima eficiencia de tokens.
 
 ## Diagrama de Flujo
 
@@ -10,80 +10,70 @@ Sistema de recomendacion de libros que usa 2 subagentes de Claude Code orquestad
 Usuario (ES/EN)
     |
     v
-[Main Conversation / Lead]  <-- lee CLAUDE.md automáticamente
+[Main Conversation / Claude Principal]  <-- lee CLAUDE.md automáticamente
     |
     | 1. Saluda y recibe input conversacional
-    | 2. Si input es vago, pide clarificación (prompts/follow-up-questions.md)
-    | 3. Si hay suficiente info, delega a profile-extractor
+    | 2. Si input es vago, pide clarificación
     v
-[profile-extractor] (haiku, sin tools)
-    |  Analiza texto natural del usuario
-    |  Detecta idioma (ES/EN)
-    |  Extrae: género, temas, mood, complejidad, libros leídos
-    |  Output: UserProfile JSON (~500 tokens)
+[Paso 1: Extracción de Criterios - ejecutado por Claude principal]
+    |  Lee reglas de .claude/agents/profile-extractor.md
+    |  Analiza texto del usuario
+    |  Extrae: genre, tropes, mood, maturity_level, books_read
+    |  Escribe .cache/criteria.json
+    |  Consumo: Incluido en tokens de Claude principal
     v
-[Main Conversation]
-    |
-    | 4. Recibe UserProfile, ejecuta vector_search.py
-    | 5. Bash: python scripts/vector_search.py /tmp/criteria.json > top_10.json
+[Paso 2: Vector Search - Python local]
+    |  Bash: python scripts/vector_search.py .cache/criteria.json
+    |  Filtra por genre, maturity, language, books_read
+    |  Calcula cosine similarity (384-dim embeddings)
+    |  Output: Top 10 candidatos a stdout
+    |  Consumo: 0 tokens
     v
-[vector_search.py] (Python local, 0 tokens)
-    |  Carga data/catalog_with_embeddings.json
-    |  Aplica filtros programáticos:
-    |    - Genre (primary_genre)
-    |    - Maturity level (maturity_level)
-    |    - Language (language_preference)
-    |    - Books read (excluye books_read)
-    |  Genera embedding de query (tropes + mood + pacing + themes)
-    |  Calcula cosine similarity contra catálogo
-    |  Output: Top 10 candidatos ordenados por similarity score
-    v
-[Main Conversation]
-    |
-    | 6. Lee top_10.json y selecciona 3 recomendaciones:
-    |      - Best Match: highest similarity en primary genre
-    |      - Discovery: alta novelty (tropes NO en perfil) + good similarity
-    |      - Secondary Match: best en género adyacente
-    | 7. Formatea según prompts/recommendation-format.md (~1,200 tokens)
-    | 8. Presenta al usuario en su idioma
-    | 9. Pregunta si quiere más detalles o nuevas recomendaciones
+[Paso 3: Presentación - ejecutado por Claude principal]
+    |  Lee reglas de .claude/agents/recommendation-presenter.md
+    |  Selecciona 3 libros (Best Match / Discovery / Secondary Match)
+    |  Genera explicaciones personalizadas
+    |  Formatea según prompts/recommendation-format.md
+    |  Consumo: Incluido en tokens de Claude principal
     v
 Usuario recibe 3 recomendaciones personalizadas
 
 Total consumo: ~1,700 tokens por recomendación
+(vs ~15,000 tokens con invocación de subagentes vía Task tool)
 ```
 
 ## Componentes
 
-### profile-extractor (Subagente)
-- **Archivo**: `.claude/agents/profile-extractor.md`
-- **Modelo**: Haiku (rápido, tarea estructurada)
-- **Tools**: Ninguno
-- **Responsabilidad**: Convertir texto natural a UserProfile JSON
-- **Consumo**: ~500 tokens
-- **Por qué separado**: Tarea limpia de NLP que se beneficia de un prompt enfocado sin ruido de datos de catálogo
+### Claude Principal (Main Conversation)
+- **Modelo**: Sonnet 4.5
+- **Responsabilidad**:
+  - Ejecutar los 3 pasos directamente (extracción, vector search, presentación)
+  - Leer archivos de referencia en `.claude/agents/` para seguir reglas
+  - Orquestar flujo completo sin invocar subagentes
+- **Consumo**: ~1,700 tokens totales por recomendación
+
+### Archivos de Referencia en `.claude/agents/`
+
+Estos archivos **NO son agentes invocables**. Son **guías de reglas** que Claude principal lee.
+
+#### profile-extractor.md (Guía de Reglas)
+- **Uso**: Claude principal lee este archivo para saber cómo extraer criterios
+- **Contenido**: Reglas de extracción, mapeo de géneros, detección de idioma
+- **Beneficio**: Reglas centralizadas y reutilizables
+
+#### recommendation-presenter.md (Guía de Reglas)
+- **Uso**: Claude principal lee este archivo para saber cómo seleccionar y presentar
+- **Contenido**: Lógica de Best Match/Discovery/Secondary Match, formato de explicaciones
+- **Beneficio**: Consistencia en tono y estructura de recomendaciones
 
 ### vector_search.py (Script Python)
 - **Archivo**: `scripts/vector_search.py`
 - **Modelo**: all-MiniLM-L6-v2 (sentence-transformers, local)
-- **Dependencias**: numpy, scikit-learn, sentence-transformers
 - **Responsabilidad**:
-  - Filtrar catálogo por género, madurez, idioma, libros leídos
-  - Generar embedding de query desde criterios de usuario
-  - Calcular cosine similarity contra embeddings pre-generados
-  - Retornar top-10 candidatos ordenados
-- **Consumo**: 0 tokens (ejecución local, sin LLM de Claude)
-- **Por qué separado**: Elimina 6,800 tokens de búsqueda iterativa que hacía book-recommender con Open Library API
-
-### Main Conversation (Claude Principal)
-- **Modelo**: Sonnet 4.5
-- **Responsabilidad**:
-  - Orquestar flujo completo
-  - Ejecutar `python scripts/vector_search.py` vía Bash
-  - Leer `top_10.json` y seleccionar 3 recomendaciones finales
-  - Formatear según `prompts/recommendation-format.md`
-  - Presentar al usuario en su idioma
-- **Consumo**: ~1,200 tokens (presentación de recomendaciones)
+  - Filtrar catálogo por criterios
+  - Calcular cosine similarity
+  - Retornar top-10 candidatos
+- **Consumo**: 0 tokens (ejecución local)
 
 ## Schemas de Datos
 
